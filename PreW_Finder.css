@@ -5,12 +5,27 @@
   font-size: 16px;
 }
 
-body {
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background-color: #2E0927;
   display: flex;
-  align-items: center;
-  flex-direction: column;
+  align-items: center; /* Center vertically */
+  justify-content: center; /* Center horizontally */
 }
 
+#container {
+  position: relative;
+  max-width: 600px;
+  padding: 20px;
+  margin: auto;
+  background-color: white;
+  border-radius: 10px;
+  text-align: center;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+  
 /* TRAINING SECTION */
 
 #trainingType {
@@ -26,15 +41,14 @@ body {
 #timeAvailInput {
   width: 90%;
   padding: 12px 20px;
-  margin: 20px auto;
+  margin: 20px auto 0 auto;
   display: block;
   box-sizing: border-box;
   font-style: italic;
-}
+}        
 
 #labelTimeInput {
   display: block;
-  margin: auto;
   margin-top: 10px;
   text-align: center;
 }
@@ -47,26 +61,36 @@ body {
 
 /* SNACK SECTION CHOOSE*/
 .snacksSection {
-  background-color: #f1f1e9;
-  width: 80%;
+  background-color: #F1F1E9;
+  width: 100%;
+  margin: 0 auto;
 }
 
 .snackOption {
-  margin: 10px 0 5px 0;
-  background-color: transparent;
-  border: 1px solid #2e0927;
+  margin: 10px 0;
+  padding: 5px 10px;
+  color: white;
+  background-color: #DD792A;
+  border: 1px solid #2E0927;
+  border-radius: 20px;
   display: flex;
 }
 
 .snackLabel {
   display: block;
+  text-align: left;
   font-style: italic;
 }
 
 /* SNACK CONTENT SECTION */
 
+#snackContentSection {
+  margin: 0 auto 20px auto;
+}
+
 .snackChosen {
-  border: #2e0927 solid 2px;
+  background-color: #F1F1E9;
+  border: #2E0927 solid 2px;
   padding: 10px;
 }
 
@@ -86,11 +110,12 @@ body {
 
 #ctaLinkButton {
   display: block;
-  margin: 10px auto;
+  margin: 20px auto -10px auto;
   background-color: transparent;
   border: 0px;
   text-decoration: underline;
-  color: #d90000;
+  color: #D90000;
+  font-size: 1.1rem;
 }
 
 /* SNACK NUTRIENT SECTION */
@@ -102,40 +127,68 @@ body {
 
 /* BUTTON */
 
+.button-container {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
 button {
   cursor: pointer;
 }
 
 .controlButton {
-  display: block;
-  background-color: #2e0927;
-  color: #ffffff;
-  padding: 10px;
-  border-radius: 5px;
-  margin: auto;
+  display: inline-block;
+  color: #FFFFFF;
+  padding: 10px 20px;
+  border-radius: 20px;
+  margin: 10px auto;
+  border-color: #D90000;
+  box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.5);
 }
 
-.controlButton:hover {
-  background-color: #d90000;
+#validTrainingButton {
+  background-color: #31092A;
+}
+
+#backButton, #nextButton {
+  background-color: #31092A;
+  margin: 10px 20px;
+}
+
+#restartButton {
+  background-color: #D90000;
+}
+
+#validTrainingButton:hover, #backButton:hover, #nextButton:hover {
+  background-color: #11020F;
+}
+
+#restartButton:hover {
+  background-color: white;
+  color: #D90000;
 }
 
 #validTrainingButton {
   display: flex;
 }
 
-/* BUTTOM SECTION */
+/* BOTTOM SECTION */
 
-#buttomSection {
-  width: 50%;
+#bottomSection {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
 }
 
 #progression-bar {
-  margin: 30px auto;
+  margin: 20px auto;
   width: 80%;
   max-width: 400px;
   position: relative;
   height: 10px;
-  border: 2px solid #2e0927;
+  border: 2px solid #2E0927;
   border-radius: 5px;
 }
 
@@ -144,7 +197,7 @@ button {
 }
 
 #filled-bar {
-  background-color: #2e0927;
+  background-color: #2E0927;
   height: 10px;
   width: 0px;
 }
@@ -156,7 +209,6 @@ button {
     display: flex; /* Flexbox makes the label and input appear on the same line */
     justify-content: center; /* Ensures no extra space between label and input */
     align-items: center; /* Vertically aligns the label and input */
-    width: 60%; /* Optional: Adjust the container width if necessary */
     margin: 0 auto; /* Centers the section */
   }
 
@@ -169,8 +221,6 @@ button {
 
   #timeAvailInput {
     display: inline-block;
-    width: 40%; /* Make the input fill the remaining space */
-    box-sizing: border-box; /* Ensures padding is included in width calculation */
   }
 
   #progression-bar {
@@ -179,7 +229,7 @@ button {
     display: flex;
     height: 10px;
     width: 80%;
-    border: 2px solid #2e0927;
+    border: 2px solid #2E0927;
     border-radius: 5px;
   }
 }
