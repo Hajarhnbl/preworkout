@@ -341,6 +341,7 @@ var snackListName = [
     snack22.name,
 ];
 console.log(window.innerWidth);
+
 // VARIABLE
 // Sections
 var upperSection = document.getElementById("upperSection");
@@ -349,11 +350,14 @@ var timeSection = document.getElementById("timeAvailSection");
 var snackSection = document.getElementById("snacksSection");
 var snackContentSection = document.getElementById("snackContentSection");
 var snackNutrientSection = document.getElementById("snackNutrientSection");
-var buttomSection = document.getElementById("buttomSection");
+var bottomSection = document.getElementById("bottomSection");
+
 // Elements
 var trainingTypeInput = document.getElementById("trainingType");
 var trainingButton = document.getElementById("validTrainingButton");
 var timeInput = document.getElementById("timeAvailInput"); //TO ASSOCIATE LATER TO ANOTHER THING
+var backButton = document.getElementById("backButton");
+var nextButton = document.getElementById("nextButton");
 var restartButton = document.getElementById("restartButton");
 var filledProgressionBar = document.getElementById("filled-bar");
 var progressionBar = document.getElementById("progression-bar");
@@ -361,6 +365,7 @@ var progressionPercentage = document.getElementById("progression-percentage");
 var ctaButton = document.getElementById("ctaLinkButton");
 var ctaLink = document.getElementById("ctaLink");
 var errorMessage = document.getElementById("errorMessage");
+
 //Elements Snack Chosen
 var snackChosenName = document.getElementById("snackChosenName");
 var snackChosenTaste = document.getElementById("snackChosenTaste");
@@ -369,110 +374,130 @@ var snackChosenOutdoor = document.getElementById("snackChosenOutdoor");
 var snackChosenIngredients = document.getElementById("snackChosenIngredients");
 var snackChosenNutrients = document.getElementById("snackChosenNutrients");
 var richFoodNutrient = document.getElementById("richFood");
+
 // Go back button → don't work see how to correct
 // function goBack() {
 //   window.history.back();
 //   console.log("it works");
 // }
+
 // Progression steps
-var stepsDone = 0;
+let stepsDone = 0;
+
 // Progression bar (3 steps to do)
 var widthBar = 0;
 if (window.innerWidth >= 900) {
-    widthBar = window.innerWidth * 0.75 * 0.5;
-}
-else {
-    widthBar = window.innerWidth * 0.75 * 0.8;
+  widthBar = window.innerWidth * 0.75 * 0.5;
+} else {
+  widthBar = window.innerWidth * 0.75 * 0.8;
 }
 progressionBar.style.setProperty("width", widthBar + "px");
+
 // RESET BUTTON
 restartButton.addEventListener("click", function () {
-    trainingSection.style.display = "block";
-    timeSection.style.display = "none"; //Display at step 2
-    snackSection.style.display = "none"; // Display at step 3
-    buttomSection.style.display = "none"; //Display this section from step 2 (timSection)
-    snackContentSection.style.display = "none";
-    snackNutrientSection.style.display = "none";
-    snackChosenOutdoor.textContent = "";
-    snackChosenOutdoor.style.border = "transparent 0px";
-    snackChosenOutdoor.style.padding = "0%";
-    snackChosenOutdoor.style.margin = "0%";
-    snackListFiltered = [];
+  trainingSection.style.display = "block";
+  timeSection.style.display = "none"; //Display at step 2
+  snackSection.style.display = "none"; // Display at step 3
+  bottomSection.style.display = "none"; //Display this section from step 2 (timSection)
+  snackContentSection.style.display = "none";
+  snackNutrientSection.style.display = "none";
+  snackChosenOutdoor.textContent = "";
+  snackChosenOutdoor.style.border = "transparent 0px";
+  snackChosenOutdoor.style.padding = "0%";
+  snackChosenOutdoor.style.margin = "0%";
+  snackListFiltered = [];
 });
+
 // BASIC SETUP
 timeSection.style.display = "none"; //Display at step 2
 snackSection.style.display = "none"; // Display at step 3
-buttomSection.style.display = "none"; //Display this section from step 2 (timSection)
+bottomSection.style.display = "none"; //Display this section from step 2 (timeSection)
 snackContentSection.style.display = "none";
 snackNutrientSection.style.display = "none";
 errorMessage.style.display = "none";
 // NOT WORKING YET LIKE I WANT NEED TO FIND A WAY TO MAKE IT WORK ONLY WHEN GO OUT OF SELECTED LIST ALL OPTIONS DISPLAYED + OTH VALUE THAN SELECTIONNER CHOOSEN TO GO NEXT STEP
+
 trainingButton.addEventListener("click", function () {
-    timeSection.style.display = "block";
-    buttomSection.style.display = "block";
-    trainingSection.style.display = "none";
-    // TRAINING TYPE PICKED
-    var selectTraining = document.querySelector("#trainingType");
-    var trainingOutput = selectTraining.value;
-    stepsDone = 1;
-    var currentWidthBar = widthBar * (stepsDone / 3);
-    progressionPercentage.innerText = Math.round(100 * (stepsDone / 3)) + "%";
-    filledProgressionBar.style.setProperty("width", currentWidthBar + "px");
+  timeSection.style.display = "block";
+  bottomSection.style.display = "block";
+  nextButton.style.display = "block"; // keep the 'next' button visible
+  trainingSection.style.display = "none";
+  // TRAINING TYPE PICKED
+  var selectTraining = document.querySelector("#trainingType");
+  var trainingOutput = selectTraining.value;
+  stepsDone = 1;
+  var currentWidthBar = widthBar * (stepsDone / 3);
+  progressionPercentage.innerText = Math.round(100 * (stepsDone / 3)) + "%";
+  filledProgressionBar.style.setProperty("width", currentWidthBar + "px");
 });
+
 var snackListFiltered = [];
 function snackFilter() {
-    snackListFiltered = [];
-    var selectTraining = document.querySelector("#trainingType");
-    var trainingOutput = selectTraining.value;
-    // Create here diff loops to create sub-array diff parameters
-    for (var i = 0; i < snackList.length; i++) {
-        // ARRAY FOR EACH CRITERIA
-        if (trainingOutput === "cardio" || trainingOutput === "HIIT") {
-            // Fast timing
-            if (Number(timeInput.value) > 0 &&
-                Number(timeInput.value) < 1.1 &&
-                snackList[i].digestibility === "fast" &&
-                snackList[i].repartitionMacros === "HG") {
-                snackListFiltered.push(snackList[i]);
-            }
-            // Medium timing
-            else if (Number(timeInput.value) > 1 &&
-                Number(timeInput.value) < 3.1 &&
-                snackList[i].digestibility === "medium" &&
-                snackList[i].repartitionMacros === "HG") {
-                snackListFiltered.push(snackList[i]);
-            }
-            // Slow timing
-            else if (Number(timeInput.value) > 3 &&
-                snackList[i].digestibility === "slow" &&
-                snackList[i].repartitionMacros === "HG") {
-                snackListFiltered.push(snackList[i]);
-            }
-        }
-        if (trainingOutput === "Plyometrics" || trainingOutput === "strength") {
-            // Fast timing
-            if (Number(timeInput.value) > 0 &&
-                Number(timeInput.value) < 1.1 &&
-                snackList[i].digestibility === "fast" &&
-                snackList[i].repartitionMacros === "HGHP") {
-                snackListFiltered.push(snackList[i]);
-            }
-            // Medium timing
-            else if (Number(timeInput.value) > 1 &&
-                Number(timeInput.value) < 3.1 &&
-                snackList[i].digestibility === "medium" &&
-                snackList[i].repartitionMacros === "HGHP") {
-                snackListFiltered.push(snackList[i]);
-            }
-            // Slow timing
-            else if (Number(timeInput.value) > 3 &&
-                snackList[i].digestibility === "slow" &&
-                snackList[i].repartitionMacros === "HGHP") {
-                snackListFiltered.push(snackList[i]);
-            }
-        }
+  snackListFiltered = [];
+  var selectTraining = document.querySelector("#trainingType");
+  var trainingOutput = selectTraining.value;
+  // Create here diff loops to create sub-array diff parameters
+  for (var i = 0; i < snackList.length; i++) {
+    // ARRAY FOR EACH CRITERIA
+    if (trainingOutput === "cardio" || trainingOutput === "HIIT") {
+      // Fast timing
+      if (
+        Number(timeInput.value) > 0 &&
+        Number(timeInput.value) < 1.1 &&
+        snackList[i].digestibility === "fast" &&
+        snackList[i].repartitionMacros === "HG"
+      ) {
+        snackListFiltered.push(snackList[i]);
+      }
+      // Medium timing
+      else if (
+        Number(timeInput.value) > 1 &&
+        Number(timeInput.value) < 3.1 &&
+        snackList[i].digestibility === "medium" &&
+        snackList[i].repartitionMacros === "HG"
+      ) {
+        snackListFiltered.push(snackList[i]);
+      }
+      // Slow timing
+      else if (
+        Number(timeInput.value) > 3 &&
+        snackList[i].digestibility === "slow" &&
+        snackList[i].repartitionMacros === "HG"
+      ) {
+        snackListFiltered.push(snackList[i]);
+      }
     }
+    if (trainingOutput === "Plyometrics" || trainingOutput === "strength") {
+      // Fast timing
+      if (
+        Number(timeInput.value) > 0 &&
+        Number(timeInput.value) < 1.1 &&
+        snackList[i].digestibility === "fast" &&
+        snackList[i].repartitionMacros === "HGHP"
+      ) {
+        snackListFiltered.push(snackList[i]);
+      }
+      // Medium timing
+      else if (
+        Number(timeInput.value) > 1 &&
+        Number(timeInput.value) < 3.1 &&
+        snackList[i].digestibility === "medium" &&
+        snackList[i].repartitionMacros === "HGHP"
+      ) {
+        snackListFiltered.push(snackList[i]);
+      }
+      // Slow timing
+      else if (
+        Number(timeInput.value) > 3 &&
+        snackList[i].digestibility === "slow" &&
+        snackList[i].repartitionMacros === "HGHP"
+      ) {
+        snackListFiltered.push(snackList[i]);
+      }
+    }
+  }
 }
+
 // SNACKLIST STEP
 var snackName = document.querySelectorAll(".snackOption");
 var snackLabel = document.querySelectorAll(".snackLabel");
@@ -483,256 +508,312 @@ var snackButton2 = document.getElementById("snackOption2");
 var snackButton3 = document.getElementById("snackOption3");
 var snackButton4 = document.getElementById("snackOption4");
 //FIND WAY TO JUST SHOW UP NUMBER OF BUTTONS NUMBER ANSWER (max button = 4 if 4< lenght filtered list (to random order also) if less just show 2 or 3 buttons)
+
 function snackChoices() {
-    // TRY PUT LENGTH FILTEREDLIST
-    var shuffled = snackListFiltered
-        .map(function (value) { return ({ value: value, sort: Math.random() }); })
-        .sort(function (a, b) { return a.sort - b.sort; })
-        .map(function (_a) {
-        var value = _a.value;
-        return value;
+  // TRY PUT LENGTH FILTEREDLIST
+  var shuffled = snackListFiltered
+    .map(function (value) {
+      return { value: value, sort: Math.random() };
+    })
+    .sort(function (a, b) {
+      return a.sort - b.sort;
+    })
+    .map(function (_a) {
+      var value = _a.value;
+      return value;
     });
-    snackButton1.style.display = "block";
-    snackButton2.style.display = "block";
-    snackButton3.style.display = "block";
-    snackButton4.style.display = "block";
-    for (var i = 0; i < Math.min(shuffled.length, 4); i++) {
-        snackName[i].textContent = shuffled[i].name;
-        console.log("Filtered List: ", snackListFiltered);
-        console.log("Shuffled List: ", shuffled);
-        if (i > 0) {
-            // FOR THE FASTEST ONE
-            if (shuffled[i].timePrep < shuffled[i - 1].timePrep) {
-                var fastestSnack = snackList[i].fastest === true;
-                fastestSnack;
-                snackLabel[i].textContent = "(le plus rapide)";
-                snackLabel[i - 1].textContent = "";
-                // FOR THE CONVENIENT ONE → add case when have both "i" and "i-1" = true → show nothing / no one as the convenient label
-                if (shuffled[i].eatOutdoor === false &&
-                    shuffled[i - 1].eatOutdoor === true) {
-                    snackLabel[i - 1].textContent = "(pratique)";
-                    snackLabel[i].textContent = "";
-                }
-            }
-            else if (shuffled[i].timePrep > shuffled[i - 1].timePrep) {
-                var fastestSnack = snackList[i - 1].fastest === true;
-                fastestSnack;
-                snackLabel[i - 1].textContent = "(le plus rapide)";
-                snackLabel[i].textContent = "";
-                if (shuffled[i].eatOutdoor === true &&
-                    shuffled[i - 1].eatOutdoor === false) {
-                    snackLabel[i].textContent = "(pratique)";
-                    snackLabel[i - 1].textContent = "";
-                }
-            }
+  snackButton1.style.display = "block";
+  snackButton2.style.display = "block";
+  snackButton3.style.display = "block";
+  snackButton4.style.display = "block";
+  for (var i = 0; i < Math.min(shuffled.length, 4); i++) {
+    snackName[i].textContent = shuffled[i].name;
+    console.log("Filtered List: ", snackListFiltered);
+    console.log("Shuffled List: ", shuffled);
+    if (i > 0) {
+      // FOR THE FASTEST ONE
+      if (shuffled[i].timePrep < shuffled[i - 1].timePrep) {
+        var fastestSnack = snackList[i].fastest === true;
+        fastestSnack;
+        snackLabel[i].textContent = "( ↑ le plus rapide)";
+        snackLabel[i - 1].textContent = "";
+        // FOR THE CONVENIENT ONE → add case when have both "i" and "i-1" = true → show nothing / no one as the convenient label
+        if (
+          shuffled[i].eatOutdoor === false &&
+          shuffled[i - 1].eatOutdoor === true
+        ) {
+          snackLabel[i - 1].textContent = "(pratique)";
+          snackLabel[i].textContent = "";
         }
-        // SEE TO DO THE SAME IN THE CASE WE HAVE ONLY 2 OR EVEN 1 SNACK??
-        if (shuffled.length === 1 && i === 0) {
-            snackButton2.style.display = "none";
-            snackButton3.style.display = "none";
-            snackButton4.style.display = "none";
+      } else if (shuffled[i].timePrep > shuffled[i - 1].timePrep) {
+        var fastestSnack = snackList[i - 1].fastest === true;
+        fastestSnack;
+        snackLabel[i - 1].textContent = "( ↑ le plus rapide)";
+        snackLabel[i].textContent = "";
+        if (
+          shuffled[i].eatOutdoor === true &&
+          shuffled[i - 1].eatOutdoor === false
+        ) {
+          snackLabel[i].textContent = "(pratique)";
+          snackLabel[i - 1].textContent = "";
         }
-        else if (shuffled.length === 2 && i === 1) {
-            snackButton3.style.display = "none";
-            snackButton4.style.display = "none";
-        }
-        else if (shuffled.length === 3 && i === 2) {
-            snackButton4.style.display = "none";
-        }
+      }
     }
+    // SEE TO DO THE SAME IN THE CASE WE HAVE ONLY 2 OR EVEN 1 SNACK??
+    if (shuffled.length === 1 && i === 0) {
+      snackButton2.style.display = "none";
+      snackButton3.style.display = "none";
+      snackButton4.style.display = "none";
+    } else if (shuffled.length === 2 && i === 1) {
+      snackButton3.style.display = "none";
+      snackButton4.style.display = "none";
+    } else if (shuffled.length === 3 && i === 2) {
+      snackButton4.style.display = "none";
+    }
+  }
 }
-timeInput.addEventListener("keypress", function (event) {
-    // If the user presses the "Enter" key on the keyboard
-    if (event.key === "Enter") {
-        if (Number(timeInput.value) > 0 && Number(timeInput.value) < 11) {
-            //ADD DIFF SECTIONS HIDE OR SHOW THEM TO GO TO THE NEXT STEP
-            snackFilter();
-            snackChoices();
-            timeSection.style.display = "none";
-            snackSection.style.display = "block";
-            errorMessage.style.display = "none";
-            timeInput.value = "";
-            stepsDone = 2;
-            var currentWidthBar = widthBar * (stepsDone / 3);
-            progressionPercentage.innerText = Math.round(100 * (stepsDone / 3)) + "%";
-            filledProgressionBar.style.setProperty("width", currentWidthBar + "px");
-        }
-        else if (typeof timeInput.value !== "number") {
-            errorMessage.style.display = "block";
-            errorMessage.textContent = "Veuillez entrer une valeur correcte";
-        }
-        else {
-            errorMessage.style.display = "block";
-            errorMessage.textContent = "Données pas valide";
-        }
-    }
+
+// BACK BUTTON
+backButton.addEventListener("click", function () {
+  if (stepsDone === 1) {
+    trainingSection.style.display = "block";
+    timeSection.style.display = "none";
+    bottomSection.style.display = "none";
+    stepsDone = 0;
+  } else if (stepsDone === 2) {
+    timeSection.style.display = "block";
+    snackSection.style.display = "none";
+    stepsDone = 1;
+  } else if (stepsDone === 3) {
+    snackSection.style.display = "block";
+    snackContentSection.style.display = "none";
+    snackNutrientSection.style.display = "none";
+    stepsDone = 2;
+  }
+
+  if (timeSection.style.display === "block") {
+    nextButton.style.display = "block"; // Rendre le bouton "next" visible à cette étape
+  }
+  if (
+    snackSection.style.display === "block" ||
+    snackContentSection.style.display === "block"
+  ) {
+    nextButton.style.display = "none"; // S'assurer qu'il reste caché aux dernières étapes
+  }
+
+  // Update the progress bar
+  var currentWidthBar = widthBar * (stepsDone / 3);
+  progressionPercentage.innerText = Math.round(100 * (stepsDone / 3)) + "%";
+  filledProgressionBar.style.setProperty("width", currentWidthBar + "px");
 });
-// To don't have always same snacks just random order new array because only the 4 first will be choosen
-// DISPLAY GOOD INFO FOR THE SNACK CHOSEN WHEN CLICKED ON
+
+// NEXT BUTTON
+timeInput.addEventListener("keypress", handleTimeInput); // For "Enter" key
+nextButton.addEventListener("click", handleTimeInput); // For "Next" button click
+function handleTimeInput(event) {
+  // Check if the event is triggered by "Enter" key or a button click
+  if (event.type === "keypress" && event.key !== "Enter") return;
+
+  let timeValue = Number(timeInput.value); // Convert input value to a number
+
+  if (!isNaN(timeValue) && timeValue > 0 && timeValue < 11) {
+    // Proceed to next step
+    snackFilter();
+    snackChoices();
+    timeSection.style.display = "none";
+    snackSection.style.display = "block";
+    errorMessage.style.display = "none";
+    timeInput.value = "";
+
+    // Update progress bar
+    stepsDone = 2;
+    var currentWidthBar = widthBar * (stepsDone / 3);
+    progressionPercentage.innerText = Math.round(100 * (stepsDone / 3)) + "%";
+    filledProgressionBar.style.setProperty("width", currentWidthBar + "px");
+
+    //Hide NEXT button after step 2
+    if (stepsDone === 2) {
+      nextButton.style.display = "none";
+    }
+  } else {
+    // Show error message
+    errorMessage.style.display = "block";
+    errorMessage.textContent = isNaN(timeValue)
+      ? "Veuillez entrer une valeur correcte"
+      : "Données non valides";
+  }
+}
+
+// SNACK PICK
 function snackPick() {
-    snackName.forEach(function (button) {
-        return button.addEventListener("click", function () {
-            var snackChosen = button.innerText;
-            snackSection.style.display = "none";
-            snackContentSection.style.display = "block";
-            stepsDone = 3;
-            var currentWidthBar = widthBar;
-            progressionPercentage.innerText = Math.round(100 * (stepsDone / 3)) + "%";
-            filledProgressionBar.style.setProperty("width", widthBar + "px");
-            // ERROR MESSAGE TO TAKE CARE OF BUT NEAR THE GOAL OF HAVING THE GOOD INDEX AND SO AFTER LINKING EACH THINGS WITH INTERFACE DATA CREATED FOR THIS SNACK
-            var snackMatch = snackListName.indexOf(snackChosen);
-            var name = snackList[snackMatch].name;
-            var taste = snackList[snackMatch].taste;
-            var time = snackList[snackMatch].timePrep;
-            var outdoor = snackList[snackMatch].eatOutdoor;
-            var ingredients = snackList[snackMatch].ingredients;
-            var nutrients = snackList[snackMatch].highlightednutrients;
-            snackChosenName.textContent = name;
-            snackChosenTaste.textContent = taste;
-            snackChosenTime.textContent = "Pr\u00E9paration: ".concat(time.toString(), " minutes");
-            snackChosenIngredients.textContent = "Ingr\u00E9dients: ".concat(ingredients.join(", "));
-            snackChosenNutrients.textContent = "Riche en:";
-            nutrients.forEach(function (nutrient) {
-                var buttonNutrient = document.createElement("button");
-                buttonNutrient.textContent = nutrient;
-                snackChosenNutrients.appendChild(buttonNutrient);
-                buttonNutrient.style.backgroundColor = "transparent";
-                buttonNutrient.style.border = "0px";
-                buttonNutrient.style.textDecoration = "underline";
-                // do here case statement
-                buttonNutrient.addEventListener("click", function () {
-                    switch (nutrient.toLowerCase()) {
-                        //MACRONUTRIENTS
-                        case "glucides":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: féculents, légumineuses, fruits";
-                            break;
-                        case "lipides":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: matières grasses, oléagineux, graines";
-                            break;
-                        case "proteines":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: produits laitiers, viandes/poissons, légumineuses";
-                            break;
-                        case "fibres":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: légumes, céréales complètes, légumineuses";
-                            break;
-                        // MICRONUTRIENTS
-                        // Minerals
-                        case "magnesium":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: amandes, graines de courge, épinards";
-                            break;
-                        case "potassium":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: banane, pomme de terre, épinards";
-                            break;
-                        case "sodium":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: sel de table, fromage, anchois";
-                            break;
-                        case "zinc":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: viande rouge, graines de courge, pois chiches";
-                            break;
-                        case "fer":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: viande rouge, lentilles, épinards";
-                            break;
-                        case "selenium":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: noix du Brésil, thon, œufs";
-                            break;
-                        case "cuivre":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: foie de bœuf, huîtres, noix de cajou";
-                            break;
-                        case "phosphore":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: fromage, poisson, poulet";
-                            break;
-                        case "calcium":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: lait, yaourt, fromage";
-                            break;
-                        case "iode":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: morue, lait, œufs";
-                            break;
-                        // Vitamins
-                        case "vitamine a":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: foie de morue, carottes, patates douces";
-                            break;
-                        case "vitamine d":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: saumon, thon, jaune d'œuf";
-                            break;
-                        case "vitamine e":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: amandes, graines de tournesol, avocat";
-                            break;
-                        case "vitamine k":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: épinards, brocoli, chou kale";
-                            break;
-                        case "vitamine c":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: poivrons rouges, kiwi, fraises";
-                            break;
-                        case "vitamine b1":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: porc, graines de tournesol, pois chiches";
-                            break;
-                        case "vitamine b2":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: foie de bœuf, amandes, yaourt";
-                            break;
-                        case "vitamine b3":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: poulet, thon, cacahuètes";
-                            break;
-                        case "vitamine b5":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: champignons, avocat, poulet";
-                            break;
-                        case "vitamine b6":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: poulet, banane, pommes de terre";
-                            break;
-                        case "vitamine b8":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: œufs, noix, amandes";
-                            break;
-                        case "vitamine b9":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: épinards, pois chiches, lentilles";
-                            break;
-                        case "vitamine b12":
-                            richFoodNutrient.textContent =
-                                "Aliments riches: foie de bœuf, palourdes, sardines";
-                            break;
-                    }
-                });
-            });
-            // Then create add event listener common for all the buttons (same class) but put case statement with names buttons (=nutrients name) to assign spec values html "p" to create with the assigned food rich in the nutrient selected
-            if (outdoor && outdoor !== null) {
-                snackChosenOutdoor.textContent = "Facile à emporter";
-                snackChosenOutdoor.style.border = "#2e0927 solid 2px";
-                snackChosenOutdoor.style.padding = "10px";
-            }
-            console.log(snackMatch);
-            console.log(snackList[snackMatch].ingredients);
+  snackName.forEach(function (button) {
+    return button.addEventListener("click", function () {
+      var snackChosen = button.innerText;
+      snackSection.style.display = "none";
+      snackContentSection.style.display = "block";
+      stepsDone = 3;
+      var currentWidthBar = widthBar;
+      progressionPercentage.innerText = Math.round(100 * (stepsDone / 3)) + "%";
+      filledProgressionBar.style.setProperty("width", widthBar + "px");
+      // ERROR MESSAGE TO TAKE CARE OF BUT NEAR THE GOAL OF HAVING THE GOOD INDEX AND SO AFTER LINKING EACH THINGS WITH INTERFACE DATA CREATED FOR THIS SNACK
+      var snackMatch = snackListName.indexOf(snackChosen);
+      var name = snackList[snackMatch].name;
+      var taste = snackList[snackMatch].taste;
+      var time = snackList[snackMatch].timePrep;
+      var outdoor = snackList[snackMatch].eatOutdoor;
+      var ingredients = snackList[snackMatch].ingredients;
+      var nutrients = snackList[snackMatch].highlightednutrients;
+      snackChosenName.textContent = name;
+      snackChosenTaste.textContent = taste;
+      snackChosenTime.textContent = "Pr\u00E9paration: ".concat(
+        time.toString(),
+        " minutes",
+      );
+      snackChosenIngredients.textContent = "Ingr\u00E9dients: ".concat(
+        ingredients.join(", "),
+      );
+      snackChosenNutrients.textContent = "Riche en:";
+      nutrients.forEach(function (nutrient) {
+        var buttonNutrient = document.createElement("button");
+        buttonNutrient.textContent = nutrient;
+        snackChosenNutrients.appendChild(buttonNutrient);
+        buttonNutrient.style.backgroundColor = "transparent";
+        buttonNutrient.style.border = "0px";
+        buttonNutrient.style.textDecoration = "underline";
+        // do here case statement
+        buttonNutrient.addEventListener("click", function () {
+          switch (nutrient.toLowerCase()) {
+            //MACRONUTRIENTS
+            case "glucides":
+              richFoodNutrient.textContent =
+                "Aliments riches: féculents, légumineuses, fruits";
+              break;
+            case "lipides":
+              richFoodNutrient.textContent =
+                "Aliments riches: matières grasses, oléagineux, graines";
+              break;
+            case "proteines":
+              richFoodNutrient.textContent =
+                "Aliments riches: produits laitiers, viandes/poissons, légumineuses";
+              break;
+            case "fibres":
+              richFoodNutrient.textContent =
+                "Aliments riches: légumes, céréales complètes, légumineuses";
+              break;
+            // MICRONUTRIENTS
+            // Minerals
+            case "magnesium":
+              richFoodNutrient.textContent =
+                "Aliments riches: amandes, graines de courge, épinards";
+              break;
+            case "potassium":
+              richFoodNutrient.textContent =
+                "Aliments riches: banane, pomme de terre, épinards";
+              break;
+            case "sodium":
+              richFoodNutrient.textContent =
+                "Aliments riches: sel de table, fromage, anchois";
+              break;
+            case "zinc":
+              richFoodNutrient.textContent =
+                "Aliments riches: viande rouge, graines de courge, pois chiches";
+              break;
+            case "fer":
+              richFoodNutrient.textContent =
+                "Aliments riches: viande rouge, lentilles, épinards";
+              break;
+            case "selenium":
+              richFoodNutrient.textContent =
+                "Aliments riches: noix du Brésil, thon, œufs";
+              break;
+            case "cuivre":
+              richFoodNutrient.textContent =
+                "Aliments riches: foie de bœuf, huîtres, noix de cajou";
+              break;
+            case "phosphore":
+              richFoodNutrient.textContent =
+                "Aliments riches: fromage, poisson, poulet";
+              break;
+            case "calcium":
+              richFoodNutrient.textContent =
+                "Aliments riches: lait, yaourt, fromage";
+              break;
+            case "iode":
+              richFoodNutrient.textContent =
+                "Aliments riches: morue, lait, œufs";
+              break;
+            // Vitamins
+            case "vitamine a":
+              richFoodNutrient.textContent =
+                "Aliments riches: foie de morue, carottes, patates douces";
+              break;
+            case "vitamine d":
+              richFoodNutrient.textContent =
+                "Aliments riches: saumon, thon, jaune d'œuf";
+              break;
+            case "vitamine e":
+              richFoodNutrient.textContent =
+                "Aliments riches: amandes, graines de tournesol, avocat";
+              break;
+            case "vitamine k":
+              richFoodNutrient.textContent =
+                "Aliments riches: épinards, brocoli, chou kale";
+              break;
+            case "vitamine c":
+              richFoodNutrient.textContent =
+                "Aliments riches: poivrons rouges, kiwi, fraises";
+              break;
+            case "vitamine b1":
+              richFoodNutrient.textContent =
+                "Aliments riches: porc, graines de tournesol, pois chiches";
+              break;
+            case "vitamine b2":
+              richFoodNutrient.textContent =
+                "Aliments riches: foie de bœuf, amandes, yaourt";
+              break;
+            case "vitamine b3":
+              richFoodNutrient.textContent =
+                "Aliments riches: poulet, thon, cacahuètes";
+              break;
+            case "vitamine b5":
+              richFoodNutrient.textContent =
+                "Aliments riches: champignons, avocat, poulet";
+              break;
+            case "vitamine b6":
+              richFoodNutrient.textContent =
+                "Aliments riches: poulet, banane, pommes de terre";
+              break;
+            case "vitamine b8":
+              richFoodNutrient.textContent =
+                "Aliments riches: œufs, noix, amandes";
+              break;
+            case "vitamine b9":
+              richFoodNutrient.textContent =
+                "Aliments riches: épinards, pois chiches, lentilles";
+              break;
+            case "vitamine b12":
+              richFoodNutrient.textContent =
+                "Aliments riches: foie de bœuf, palourdes, sardines";
+              break;
+          }
         });
+      });
+      // Then create add event listener common for all the buttons (same class) but put case statement with names buttons (=nutrients name) to assign spec values html "p" to create with the assigned food rich in the nutrient selected
+      if (outdoor && outdoor !== null) {
+        snackChosenOutdoor.textContent = "Facile à emporter";
+        snackChosenOutdoor.style.border = "#2e0927 solid 2px";
+        snackChosenOutdoor.style.padding = "10px";
+      }
+      console.log(snackMatch);
+      console.log(snackList[snackMatch].ingredients);
     });
+  });
 }
 snackPick();
 function ctaClick() {
-    ctaButton.addEventListener("click", function () {
-        ctaLink.href = "https://www.bedietonic.com/guide-repas-autour-des-seances/";
-    });
+  ctaButton.addEventListener("click", function () {
+    ctaLink.href = "https://www.bedietonic.com/guide-repas-autour-des-seances/";
+  });
 }
 // DIFF STEPS TO DO//
 // 3. Add 10 snacks more in categories where it lacks → just try it out and define (ask Elo for ideas)
